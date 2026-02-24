@@ -5,7 +5,7 @@ const Program = () => {
   return (
     <>
         <ProgramList />
-        <ProgramDetails/>
+        
     </>
   )
 }
