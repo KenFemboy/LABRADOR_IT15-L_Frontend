@@ -4,7 +4,7 @@ import ProgramDetails from './Programdetails.jsx';
 const Program = () => {
   return (
     <>
-        {/* <ProgramList /> */}
+        <ProgramList />
         <ProgramDetails/>
     </>
   )
