@@ -5,7 +5,7 @@ const Subject = () => {
   return (
     <>
      <SubjectList />
-     <SubjectDetails />
+    
     </>
   )
 }

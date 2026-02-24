@@ -487,3 +487,119 @@
   from { opacity: 0; transform: scale(0.95) translateY(20px); }
   to { opacity: 1; transform: scale(1) translateY(0); }
 }
+
+/* --- CONTROL BAR --- */
+.program-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  background: var(--bg-cream);
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.search-wrapper { flex: 1; min-width: 250px; }
+.search-wrapper input {
+  width: 100%;
+  padding: 12px;
+  border: 1.5px solid var(--border-color);
+  border-radius: 8px;
+  outline: none;
+}
+
+.filter-wrapper {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.filter-wrapper select {
+  padding: 10px;
+  border: 1.5px solid var(--border-color);
+  border-radius: 8px;
+  background: white;
+}
+
+.add-new-btn {
+  background-color: var(--primary-teal);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* --- FORM MODAL STYLING --- */
+.form-modal {
+  max-width: 600px !important;
+  padding: 2.5rem;
+}
+
+.program-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  margin-top: 1.5rem;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.program-form label {
+  display:unset;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--secondary-green);
+  margin-bottom: -0.5rem;
+}
+
+.program-form input, 
+.program-form select, 
+.program-form textarea {
+  padding: 10px;
+  border: 1.5px solid var(--border-color);
+  border-radius: 6px;
+  font-family: inherit;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.btn-cancel {
+  background: none;
+  border: 1px solid var(--text-muted);
+  color: var(--text-muted);
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn-submit {
+  background: var(--primary-teal);
+  color: white;
+  border: none;
+  padding: 10px 25px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.no-results {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 3rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
