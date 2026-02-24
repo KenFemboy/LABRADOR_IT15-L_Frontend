@@ -1,0 +1,17 @@
+:root {
+  /* Core Palette */
+  --primary-teal: #36997d;      /* Venti's main outfit & vision */
+  --secondary-green: #31777a;   /* Darker cloak accents */
+  --accent-gold: #d4af37;       /* Lyre strings & outfit embroidery */
+  --lyre-brown: #5c4033;        /* Headers / Grounding element */
+  --anemo-glow: #8ef2f4;        /* Soft glow for focus states */
+  
+  /* Neutral Palette */
+  --bg-cream: #fefefe;          /* Card backgrounds */
+  --text-main: #333333;         /* Body text */
+  --text-muted: #6b7280;        /* Subtitles / Placeholder */
+  --border-color: #d1d5db;
+}
+body{
+    margin: 0;
+}
