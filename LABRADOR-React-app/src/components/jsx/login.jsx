@@ -1,25 +1,49 @@
 import React from 'react'
 import { useState } from 'react';
 import "../css/login.css"
+import { useNavigate } from 'react-router-dom';
 const login = () => {
+  const naviage = useNavigate();
   const [passwordShown, setPasswordShown] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+  
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+
   const togglePassword = () => {
     setPasswordShown(!passwordShown);
   };
-  const handleSubmit = (e) => {
+
+
+  const handleLogin = async(e) => {
     e.preventDefault();
+    setError("");
     setIsLoading(true);
+    
+  
+    try{
+      const response = await fetch("http://127.0.0.1:8000/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ email, password })
+      });
+      const data = await response.json();
 
-    // Simulate a business API call (2 seconds)
-    setTimeout(() => {
-      setIsLoading(false);
-      alert("Login successful!");
-      window.location.reload();
-    }, 2000);
-
-
-  };
+      if (response.ok) {
+        localStorage.setItem("token", data.token);
+        naviage("/overview");
+      } else {
+        alert( data.message || "Invalid credentials, please try again.");
+      }
+    } catch (error) {
+      console.error("Login failed:", error);
+    }
+  }
+  
   return (
     <div className="login-page-wrapper">
 
@@ -38,7 +62,7 @@ const login = () => {
       {/* Right Side: Floating Login Form */}
       <div className="login-right-panel">
         <div className="login-container">
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleLogin}>
             <h2>Student Sign In</h2>
             <p className="subtitle">Please enter your university credentials.</p>
 
@@ -48,6 +72,8 @@ const login = () => {
                 type="email"
                 id="email"
                 placeholder="name@umindanao.edu.ph"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 required
               />
             </div>
@@ -58,6 +84,8 @@ const login = () => {
                 type={passwordShown ? "text" : "password"}
                 id="password"
                 placeholder="••••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 required
               />
               <div className="checkbox-container">

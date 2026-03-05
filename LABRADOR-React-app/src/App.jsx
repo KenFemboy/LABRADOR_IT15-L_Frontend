@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { BrowserRouter, Routes, Route } from "react-router-dom"
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import Login from "./components/jsx/login.jsx"
@@ -9,10 +10,14 @@ import Overview from './pages/jsx/overview.jsx'
 
 function App() {
   return (
-   <>
-    {/* <Login /> */}
-    <Overview />
-   </>
+   <BrowserRouter>
+   <Routes>
+    <Route path="/" element={<Login />} />
+    <Route path="/overview" element={<Overview />} />
+
+   </Routes>
+    
+   </BrowserRouter>
   )
 }
 
