@@ -1,4 +1,12 @@
-
+.error-message {
+  background-color: rgba(124, 5, 5, 0.781);
+  color: var(--bg-cream);
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  font-weight: 600;
+}
 
 /* --- SPLIT SCREEN LAYOUT --- */
 .login-page-wrapper {

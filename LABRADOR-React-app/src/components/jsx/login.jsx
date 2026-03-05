@@ -3,11 +3,11 @@ import { useState } from 'react';
 import "../css/login.css"
 import { useNavigate } from 'react-router-dom';
 const login = () => {
-  const naviage = useNavigate();
+  const navigate = useNavigate();
   const [passwordShown, setPasswordShown] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -21,7 +21,6 @@ const login = () => {
     e.preventDefault();
     setError("");
     setIsLoading(true);
-    
   
     try{
       const response = await fetch("http://127.0.0.1:8000/api/login", {
@@ -35,12 +34,13 @@ const login = () => {
 
       if (response.ok) {
         localStorage.setItem("token", data.token);
-        naviage("/overview");
+        navigate("/overview");
       } else {
-        alert( data.message || "Invalid credentials, please try again.");
+        setError(data.message || "Invalid credentials, please try again.");
+        setIsLoading(false);
       }
     } catch (error) {
-      console.error("Login failed:", error);
+      setError("Login failed:", error);
     }
   }
   
@@ -64,6 +64,8 @@ const login = () => {
         <div className="login-container">
           <form onSubmit={handleLogin}>
             <h2>Student Sign In</h2>
+          {error && <div className="error-message">{error}</div>}
+
             <p className="subtitle">Please enter your university credentials.</p>
 
             <div className="form-group">
