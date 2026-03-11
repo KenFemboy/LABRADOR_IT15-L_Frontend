@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import '../css/Overview.css'; 
-import Dashboard from '../../components/jsx/Dashboard.jsx';
-import Program from '../../components/jsx/Program/Program.jsx';
-import Subject from '../../components/jsx/Subject/Subject.jsx';
+import Dashboard from '../../components/dashboard/Dashboard.jsx';
+import Program from '../../components/dashboard/Program/Program.jsx';
+import Subject from '../../components/dashboard/Subject/Subject.jsx';
 
 
 
