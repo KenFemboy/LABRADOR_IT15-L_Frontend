@@ -1,7 +1,8 @@
 import React from 'react'
 import { useState } from 'react';
-import '../auth/login.css'
+import './login.css'
 import { useNavigate } from 'react-router-dom';
+import LoadingSpinner from '../common/LoadingSpinner';
 const login = () => {
   const navigate = useNavigate();
   const [passwordShown, setPasswordShown] = useState(false);
@@ -17,32 +18,35 @@ const login = () => {
   };
 
 
-  const handleLogin = async(e) => {
-    e.preventDefault();
-    setError("");
-    setIsLoading(true);
-  
-    try{
-      const response = await fetch("http://127.0.0.1:8000/api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ email, password })
-      });
-      const data = await response.json();
+const handleLogin = async(e) => {
+  e.preventDefault();
+  setError("");
+  setIsLoading(true);
 
-      if (response.ok) {
-        localStorage.setItem("token", data.token);
-        navigate("/overview");
-      } else {
-        setError(data.message || "Invalid credentials, please try again.");
-        setIsLoading(false);
-      }
-    } catch (error) {
-      setError("Login failed:", error);
+  try{
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      },
+      body: JSON.stringify({ email, password })
+    });
+    const data = await response.json();
+
+    if (response.ok) {
+      localStorage.setItem("auth_token", data.token);  // Changed from "token"
+      localStorage.setItem("user", JSON.stringify(data.user));  // Store user
+      navigate("/dashboard");
+    } else {
+      setError(data.message || "Invalid credentials, please try again.");
+      setIsLoading(false);
     }
+  } catch (error) {
+    setError("Login failed: " + error.message);
+    setIsLoading(false);
   }
+}
   
   return (
     <div className="login-page-wrapper">
@@ -101,7 +105,7 @@ const login = () => {
             </div>
 
             <button type="submit" disabled={isLoading} className={isLoading ? 'loading' : ''}>
-              {isLoading ? <span className="spinner"></span> : "Access Dashboard"}
+              {isLoading ? <LoadingSpinner /> : "Access Dashboard"}
             </button>
           </form>
         </div>

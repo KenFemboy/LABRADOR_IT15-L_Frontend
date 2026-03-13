@@ -1,23 +1,28 @@
-import { useState } from 'react'
 import { BrowserRouter, Routes, Route } from "react-router-dom"
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import Login from "./components/auth/login.jsx"
-
+import Dashboard from './components/dashboard/Dashboard.jsx'
+import ProtectedRoute from './ProtectedRoute';
+import { AuthProvider } from './hooks/useAuth.jsx';
 
 import './App.css'
-import Overview from './pages/jsx/overview.jsx'
 
 function App() {
   return (
    <BrowserRouter>
-   <Routes>
-    <Route path="/" element={<Login />} />
-    <Route path="/overview" element={<Overview />} />
-
-   </Routes>
-    
-   </BrowserRouter>
+      <AuthProvider>
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route 
+            path="/dashboard" 
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            } 
+          />
+        </Routes>
+      </AuthProvider>
+    </BrowserRouter>
   )
 }
 
