@@ -1,65 +1,93 @@
-import { useState, useContext, createContext } from 'react';
-import api from '../services/api';
+import { useState, useContext, createContext } from "react";
+import api from "../services/api";
+import axios from "axios";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
+
   const [user, setUser] = useState(() => {
-    const savedUser = localStorage.getItem('user');
+    const savedUser = localStorage.getItem("user");
     return savedUser ? JSON.parse(savedUser) : null;
   });
-  const [token, setToken] = useState(localStorage.getItem('auth_token'));
+
+  const [token, setToken] = useState(localStorage.getItem("auth_token"));
+  const [userType, setUserType] = useState(localStorage.getItem("user_type"));
   const [loading, setLoading] = useState(false);
 
-  const login = async (email, password) => {
+  // LOGIN
+  const login = async (credentials) => {
     try {
       setLoading(true);
-      const response = await api.post('/login', { email, password });
-      
-      localStorage.setItem('auth_token', response.data.token);
-      localStorage.setItem('user', JSON.stringify(response.data.user));
-      
+
+      const endpoint = credentials.student_number
+        ? "/student/login"
+        : "/admin/login";
+
+      const response = await api.post(endpoint, credentials);
+
+      const loggedUser = response.data.user || response.data.student;
+
+      localStorage.setItem("auth_token", response.data.token);
+      localStorage.setItem("user", JSON.stringify(loggedUser));
+      localStorage.setItem("user_type", response.data.type);
+
       setToken(response.data.token);
-      setUser(response.data.user);
-      
+      setUser(loggedUser);
+      setUserType(response.data.type);
+
       return response.data;
+
     } catch (error) {
-      console.error('Login error:', error.response.data);
+      console.error("Login error:", error.response?.data);
       throw error;
     } finally {
       setLoading(false);
     }
   };
 
+  // LOGOUT
   const logout = async () => {
     try {
-      setLoading(true);
-      await api.post('/logout');
-    } catch (error) {
-      console.error('Logout error:', error);
-    } finally {
-      localStorage.removeItem('auth_token');
-      localStorage.removeItem('user');
-      setToken(null);
-      setUser(null);
-      setLoading(false);
-    }
-  };
+      const token = localStorage.getItem("auth_token");
 
-  const getUser = async () => {
-    try {
-      const response = await api.get('/user');
-      setUser(response.data.user);
-      return response.data.user;
+      if (token) {
+        await axios.post(
+          `${import.meta.env.VITE_API_URL}/logout`,
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              Accept: "application/json",
+            },
+          }
+        );
+      }
+
     } catch (error) {
-      console.error('Get user error:', error);
-      await logout();
-      throw error;
+      console.error("Logout error:", error);
     }
+
+    localStorage.removeItem("auth_token");
+    localStorage.removeItem("user");
+    localStorage.removeItem("user_type");
+
+    setUser(null);
+    setToken(null);
+    setUserType(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, loading, login, logout, getUser }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        token,
+        userType,
+        loading,
+        login,
+        logout
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
@@ -67,8 +95,10 @@ export const AuthProvider = ({ children }) => {
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
+
   if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error("useAuth must be used within an AuthProvider");
   }
+
   return context;
 };

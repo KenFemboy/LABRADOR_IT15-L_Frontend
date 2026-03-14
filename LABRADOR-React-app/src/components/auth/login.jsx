@@ -1,18 +1,21 @@
 import React, { useState } from "react";
-import "./login.css";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../hooks/useAuth.jsx";
 import LoadingSpinner from "../common/LoadingSpinner";
+import "./login.css";
 
 const Login = () => {
   const navigate = useNavigate();
+  const { login } = useAuth();
 
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [studentNumber, setStudentNumber] = useState("");
   const [passwordShown, setPasswordShown] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [studentNumber, setStudentNumber] = useState(""); // ✅ added
+  const togglePassword = () => setPasswordShown(!passwordShown);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -20,46 +23,23 @@ const Login = () => {
     setIsLoading(true);
 
     try {
-      // decide endpoint
-      const endpoint = studentNumber ? "/student/login" : "/admin/login";
-
-      const bodyData = studentNumber
+      // Build credentials
+      const credentials = studentNumber
         ? { email, student_number: studentNumber }
         : { email, password };
 
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}${endpoint}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-          body: JSON.stringify(bodyData),
-        }
-      );
+      // Call login from AuthProvider
+      const data = await login(credentials);
 
-      const data = await response.json();
-
-      if (response.ok) {
-        localStorage.setItem("auth_token", data.token);
-        localStorage.setItem(
-          "user",
-          JSON.stringify(data.user || data.student)
-        );
-        localStorage.setItem("user_type", data.type);
-
-        if (data.type === "admin") {
-          navigate("/dashboard");
-        } else {
-          navigate("/student/dashboard");
-        }
+      // Redirect based on user type
+      if (data.type === "admin") {
+        navigate("/admin/dashboard");
       } else {
-        setError(data.message || "Invalid credentials.");
-        setIsLoading(false);
+        navigate("/dashboard"); // student dashboard
       }
-    } catch (error) {
-      setError("Login failed: " + error.message);
+
+    } catch (err) {
+      setError(err.response?.data?.message || "Login failed. Check your credentials.");
       setIsLoading(false);
     }
   };
@@ -67,31 +47,25 @@ const Login = () => {
   return (
     <div className="login-page-wrapper">
 
-      {/* Left Side */}
+      {/* Left Branding */}
       <div className="login-left-panel">
         <div className="branding-content">
           <div className="logo-icon">🎓</div>
           <h1 className="school-title">University Portal</h1>
           <p className="school-tagline">
             "Winds of knowledge, melodies of freedom." <br />
-            Access your courses, connect with peers, and manage your journey.
+            Access your courses, connect with peers, and manage your student journey.
           </p>
         </div>
       </div>
 
-      {/* Right Side */}
+      {/* Right Login Form */}
       <div className="login-right-panel">
         <div className="login-container">
           <form onSubmit={handleLogin}>
             <h2>Portal Sign In</h2>
-
             {error && <div className="error-message">{error}</div>}
 
-            <p className="subtitle">
-              Enter your credentials to access the dashboard.
-            </p>
-
-            {/* Email */}
             <div className="form-group">
               <label>Email</label>
               <input
@@ -111,6 +85,8 @@ const Login = () => {
                 placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                // only required for admin login
+                required={!studentNumber}
               />
             </div>
 
@@ -130,12 +106,11 @@ const Login = () => {
               <input
                 type="checkbox"
                 id="togglePassword"
-                onChange={() => setPasswordShown(!passwordShown)}
+                onChange={togglePassword}
               />
               <label htmlFor="togglePassword">Show Password</label>
             </div>
 
-            {/* Submit */}
             <button
               type="submit"
               disabled={isLoading}
@@ -146,7 +121,6 @@ const Login = () => {
           </form>
         </div>
       </div>
-
     </div>
   );
 };

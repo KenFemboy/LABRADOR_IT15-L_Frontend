@@ -1,29 +1,40 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom"
-import Login from "./components/auth/login.jsx"
-import Dashboard from './components/dashboard/Dashboard.jsx'
-import ProtectedRoute from './ProtectedRoute';
-import { AuthProvider } from './hooks/useAuth.jsx';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Login from "./components/auth/login.jsx";
+import Dashboard from "./components/dashboard/Dashboard.jsx";
+import ProtectedRoute from "./ProtectedRoute";
+import GuestRoute from "./GuestRoute";
+import { AuthProvider } from "./hooks/useAuth.jsx";
 
-import './App.css'
+import "./App.css";
 
 function App() {
   return (
-   <BrowserRouter>
+    <BrowserRouter>
       <AuthProvider>
         <Routes>
-          <Route path="/" element={<Login />} />
-          <Route 
-            path="/dashboard" 
+          {/* Only accessible if NOT logged in */}
+          <Route
+            path="/"
+            element={
+              <GuestRoute>
+                <Login />
+              </GuestRoute>
+            }
+          />
+
+          {/* Only accessible if logged in */}
+          <Route
+            path="/dashboard"
             element={
               <ProtectedRoute>
                 <Dashboard />
               </ProtectedRoute>
-            } 
+            }
           />
         </Routes>
       </AuthProvider>
     </BrowserRouter>
-  )
+  );
 }
 
-export default App
+export default App;

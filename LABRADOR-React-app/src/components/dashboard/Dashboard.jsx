@@ -16,6 +16,8 @@ const Dashboard = () => {
         return <div>Program information will appear here.</div>;
       case 'subject':
         return <div>Subject details will appear here.</div>;
+      case 'adminpanel':
+        return <div>Admin panel information will appear here.</div>;
       default:
         return <div>Welcome to the dashboard overview.</div>;
     }
