@@ -40,37 +40,41 @@ const handleLogout = async () => {
       </div>
 
       <nav className="sidebar-nav">
-
-        {/* Show only if admin */}
-        {userType === "admin" && (
-          <button
-            className={`nav-item ${activeView === "adminpanel" ? "active" : ""}`}
-            onClick={() => setActiveView("adminpanel")}
-          >
-            Admin Panel
-          </button>
-        )}
-
         <button
           className={`nav-item ${activeView === "dashboard" ? "active" : ""}`}
           onClick={() => setActiveView("dashboard")}
         >
           Dashboard
         </button>
+        {/* Show only if admin */}
+        {userType === "admin" && (
+          <button
+            className={`nav-item ${activeView === "admin" ? "active" : ""}`}
+            onClick={() => setActiveView("admin")}
+          >
+            Admin Panel
+          </button>
+        )}
+        {userType === "student" && (
 
-        <button
-          className={`nav-item ${activeView === "program" ? "active" : ""}`}
-          onClick={() => setActiveView("program")}
-        >
-          Program
-        </button>
+          <button
+            className={`nav-item ${activeView === "information" ? "active" : ""}`}
+            onClick={() => setActiveView("information")}
+          >
+            Information
+          </button>
+        )}
+        {userType === "student" && (
+          <button
+            className={`nav-item ${activeView === "courses" ? "active" : ""}`}
+            onClick={() => setActiveView("courses")}
+          >
+            Courses
+          </button>
+        )}
 
-        <button
-          className={`nav-item ${activeView === "subject" ? "active" : ""}`}
-          onClick={() => setActiveView("subject")}
-        >
-          Subject
-        </button>
+
+        
 
       </nav>
 
