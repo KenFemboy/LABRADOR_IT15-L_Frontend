@@ -14,3 +14,47 @@ How to run Frontend
     1. Open your database (Laragon/Xampp)
     2. Find a student and copy their email address and student_number
     3. User the email address and student_number (type in Student number, ignore password field)
+
+Frontend Technologies
+
+      React – Main library for building the user interface
+
+      Vite – Fast development server and build tool
+
+      React Router – Client-side routing for navigation
+
+      Tailwind CSS – Utility-first CSS framework for styling
+
+      FullCalendar – Calendar UI component for schedules/events
+
+      Recharts – Data visualization charts
+
+      Lucide – Icon library used in React
+
+      Axios – API request library
+         
+      Backend Technologies
+
+Laravel – Backend API framework
+
+      Laravel Vite Plugin – Connects Laravel with Vite
+
+      MySQL – Database used with Laravel
+
+      Development Tools
+
+      ESLint – Code quality and linting
+
+      PostCSS – CSS transformation tool
+
+      Autoprefixer – Automatically adds CSS vendor prefixes
+
+      Concurrently – Runs multiple commands at the same time
+
+Stack Summary
+
+      Frontend: React + Vite + Tailwind + React Router + FullCalendar + Recharts
+
+      Backend: Laravel + MySQL
+
+      API Communication: Axios
