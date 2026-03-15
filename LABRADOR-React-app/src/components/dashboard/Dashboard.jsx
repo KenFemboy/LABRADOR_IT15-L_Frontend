@@ -6,8 +6,12 @@ import CourseDistribution from './CourseDistributionChart';
 import EnrollmentChart from './EnrollmentChart';
 import StudentProfile from './StudentProfile';
 import Courses from './Courses';
-import Information from './Information';
 import AttendanceChart from './AttendanceChart';
+import ForecastDisplay from '../weather/ForecastDisplay';
+import WeatherWidget from '../weather/WeatherWidget';
+import Calendar from './Calendar.jsx';
+
+
 const Dashboard = () => {
   // keep the active view state here so both header and content can access it
   const [activeView, setActiveView] = useState('dashboard');
@@ -28,6 +32,10 @@ const Dashboard = () => {
         return <Courses />;
       case 'students':
         return <AttendanceChart />;
+      case 'weather':
+        return <ForecastDisplay/>;
+      case 'calendar':
+        return <Calendar/>
       default:
         return <div>Welcome to the dashboard overview.</div>;
     }
@@ -42,7 +50,7 @@ const Dashboard = () => {
       <main className="main-content">
         <header className="content-header">
           <h1>{activeView.charAt(0).toUpperCase() + activeView.slice(1)}</h1>
-          <Information />
+          <WeatherWidget/>
           <div className="header-right"> 
             <span className="logo">🎓</span>
             <h2>UniPortal</h2>

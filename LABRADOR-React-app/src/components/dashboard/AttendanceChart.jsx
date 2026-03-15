@@ -28,7 +28,7 @@ const AttendanceChart = () => {
     const fetchDepartments = async () => {
       setLoading(true);
       try {
-        const res = await fetch("http://127.0.0.1:8000/api/departments");
+        const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/departments`);
         const data = await res.json();
         if (data.status === "success") setDepartments(data.data);
       } catch (err) {

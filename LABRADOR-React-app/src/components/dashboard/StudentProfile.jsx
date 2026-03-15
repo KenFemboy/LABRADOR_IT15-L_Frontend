@@ -98,7 +98,7 @@ const StudentProfile = ({ onNavigate }) => {
                 <label className="block text-[10px] font-black uppercase text-[var(--text-muted)] tracking-[0.2em] mb-2">Department</label>
                 <div className="flex flex-wrap gap-2">
                   {Array.from(new Set(profile.courses.map(c => c.department?.department_name).filter(Boolean))).map((dept, i) => (
-                    <span onClick={() => onNavigate('courses')} key={i} className="text-[18px] bg-[var(--primary-teal)] text-white font-bold px-8 py-1 rounded" >
+                    <span onClick={() => onNavigate('courses')} key={i} className="text-[18px] bg-[var(--primary-teal)] text-white font-bold px-4 py-1 rounded" >
                       {dept}
                     </span>
                   ))}
@@ -137,7 +137,7 @@ const StudentProfile = ({ onNavigate }) => {
                 <div key={course.id} className="group bg-white p-6 rounded-2xl shadow-sm hover:shadow-xl transition-all border-b-4 border-transparent hover:border-[var(--accent-gold)]">
                   <div className="flex justify-between items-start mb-4">
                     <div className="p-3 rounded-lg bg-[var(--anemo-glow)] text-[var(--secondary-green)] group-hover:bg-[var(--primary-teal)] group-hover:text-white transition-colors">
-                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="Ref M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.74 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>
+                     
                     </div>
                     <span className="text-[10px] font-bold text-[var(--accent-gold)] uppercase tracking-widest px-2 py-1 rounded bg-amber-50">Enrolled</span>
                   </div>

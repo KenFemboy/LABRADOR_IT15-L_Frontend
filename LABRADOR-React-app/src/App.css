@@ -12,7 +12,41 @@
   --text-main: #333333;         /* Body text */
   --text-muted: #6b7280;        /* Subtitles / Placeholder */
   --border-color: #d1d5db;
+
+
 }
+/* Weekdays */
+.weekday-day {
+  background-color: var(--primary-teal) !important;
+}
+
+.weekday-day .fc-daygrid-day-number,
+.weekday-day .fc-daygrid-event {
+  color: white !important;
+  font-weight: 500;
+}
+
+/* Weekends */
+.weekend-day {
+  background-color: #c27575 !important;
+}
+
+.weekend-day .fc-daygrid-day-number,
+.weekend-day .fc-daygrid-event {
+  color: white !important;
+  font-weight: 500;
+}
+.fc-day-today {
+  background-color: var(--accent-gold) !important;
+}
+
+/* Keep text readable */
+.fc-day-today .fc-daygrid-day-number,
+.fc-day-today .fc-daygrid-event {
+  color: black !important;
+  font-weight: 600;
+}
+
 body{
     margin: 0;
 }

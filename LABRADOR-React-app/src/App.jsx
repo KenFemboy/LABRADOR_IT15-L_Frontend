@@ -4,6 +4,7 @@ import Dashboard from "./components/dashboard/Dashboard.jsx";
 import ProtectedRoute from "./ProtectedRoute";
 import GuestRoute from "./GuestRoute";
 import { AuthProvider } from "./hooks/useAuth.jsx";
+import ErrorBoundary from "./components/common/Errorboundary.jsx";
 
 import "./App.css";
 
@@ -31,6 +32,9 @@ function App() {
               </ProtectedRoute>
             }
           />
+
+          {/* Catch ALL unknown routes */}
+          <Route path="*" element={<ErrorBoundary />} />
         </Routes>
       </AuthProvider>
     </BrowserRouter>
