@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth.jsx";
 
@@ -8,22 +8,30 @@ const Navbar = ({ activeView, setActiveView }) => {
 
   const userType = localStorage.getItem("user_type"); // admin or student
 
-const handleLogout = async () => {
-  const confirmLogout = window.confirm("Are you sure you want to log out?");
+  // Automatically set the active view based on role
+  useEffect(() => {
+    if (!user) return;
 
-  if (!confirmLogout) return;
+    if (userType === "student") {
+      setActiveView("dashboard");
+    } else if (userType === "admin") {
+      setActiveView("admin");
+    }
+  }, [user, userType, setActiveView]);
 
-  try {
-    await logout();
-    navigate("/");
-  } catch (error) {
-    console.error("Logout failed:", error);
-  }
-};
+  const handleLogout = async () => {
+    const confirmLogout = window.confirm("Are you sure you want to log out?");
+    if (!confirmLogout) return;
+    try {
+      await logout();
+      navigate("/");
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
 
   // Show full name if student
   let userName = "User";
-
   if (userType === "student") {
     userName = `${user?.last_name || ""}, ${user?.first_name || ""}`;
   } else {
@@ -40,42 +48,48 @@ const handleLogout = async () => {
       </div>
 
       <nav className="sidebar-nav">
-        <button
-          className={`nav-item ${activeView === "dashboard" ? "active" : ""}`}
-          onClick={() => setActiveView("dashboard")}
-        >
-          Dashboard
-        </button>
-        {/* Show only if admin */}
+        {/* Admin only */}
         {userType === "admin" && (
+          <>
           <button
             className={`nav-item ${activeView === "admin" ? "active" : ""}`}
             onClick={() => setActiveView("admin")}
           >
             Admin Panel
           </button>
-        )}
-        {userType === "student" && (
-
           <button
-            className={`nav-item ${activeView === "information" ? "active" : ""}`}
-            onClick={() => setActiveView("information")}
+            className={`nav-item ${activeView === "students" ? "active" : ""}`}
+            onClick={() => setActiveView("students")}
           >
-            Information
+            Student Records
           </button>
+          </>
+
         )}
+
+        {/* Student only */}
         {userType === "student" && (
-          <button
-            className={`nav-item ${activeView === "courses" ? "active" : ""}`}
-            onClick={() => setActiveView("courses")}
-          >
-            Courses
-          </button>
+          <>
+            <button
+              className={`nav-item ${activeView === "dashboard" ? "active" : ""}`}
+              onClick={() => setActiveView("dashboard")}
+            >
+              Dashboard
+            </button>
+            <button
+              className={`nav-item ${activeView === "information" ? "active" : ""}`}
+              onClick={() => setActiveView("information")}
+            >
+              Information
+            </button>
+            <button
+              className={`nav-item ${activeView === "courses" ? "active" : ""}`}
+              onClick={() => setActiveView("courses")}
+            >
+              Courses
+            </button>
+          </>
         )}
-
-
-        
-
       </nav>
 
       <div className="sidebar-footer">

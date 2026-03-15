@@ -7,6 +7,7 @@ import EnrollmentChart from './EnrollmentChart';
 import StudentProfile from './StudentProfile';
 import Courses from './Courses';
 import Information from './Information';
+import AttendanceChart from './AttendanceChart';
 const Dashboard = () => {
   // keep the active view state here so both header and content can access it
   const [activeView, setActiveView] = useState('dashboard');
@@ -25,6 +26,8 @@ const Dashboard = () => {
         return <CourseDistribution />;
       case 'courses':
         return <Courses />;
+      case 'students':
+        return <AttendanceChart />;
       default:
         return <div>Welcome to the dashboard overview.</div>;
     }
