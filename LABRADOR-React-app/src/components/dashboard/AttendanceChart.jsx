@@ -101,10 +101,10 @@ const AttendanceChart = () => {
                 <div className="flex items-center gap-5">
                   <div className={`w-1.5 h-10 rounded-full ${isDeptOpen ? 'bg-[var(--accent-gold)]' : 'bg-[var(--primary-teal)]'}`}></div>
                   <div>
-                    <h3 className={`text-xl font-bold transition-colors ${isDeptOpen ? 'text-white' : 'text-[var(--lyre-brown)]'}`}>
+                    <h3 className={`text-xl font-bold transition-colors ${isDeptOpen ? 'text-white' : 'text-[var(--text-main)]'}`}>
                       {dept.department_name}
                     </h3>
-                    <p className={`text-[10px] font-black uppercase tracking-[0.2em] mt-0.5 ${isDeptOpen ? 'text-[var(--anemo-glow)] opacity-80' : 'text-[var(--text-muted)]'}`}>
+                    <p className={`text-[10px] font-black uppercase tracking-[0.2em] mt-0.5 ${isDeptOpen ? 'text-[var(--anemo-glow)] opacity-80' : 'text-[var(--accent-gold)]'}`}>
                       {dept.courses.length} MATCHING COURSES
                     </p>
                   </div>
