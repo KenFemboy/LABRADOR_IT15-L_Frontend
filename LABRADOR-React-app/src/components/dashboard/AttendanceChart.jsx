@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import FilterBar from "./Filterbar.jsx"; // Make sure the path is correct
+
 const Chevron = ({ isOpen, colorClass = "text-current" }) => (
-  <svg 
-    className={`w-5 h-5 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''} ${colorClass}`} 
+  <svg
+    className={`w-5 h-5 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''} ${colorClass}`}
     fill="none" stroke="currentColor" viewBox="0 0 24 24"
   >
     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" />
   </svg>
 );
-// ... (Chevron and imports remain the same)
 
 const AttendanceChart = () => {
   const [departments, setDepartments] = useState([]);
@@ -17,21 +17,23 @@ const AttendanceChart = () => {
   const [openDept, setOpenDept] = useState(null);
   const [openCourse, setOpenCourse] = useState(null);
 
-  // 1. UPDATED KEYS TO MATCH FILTERBAR
   const [filters, setFilters] = useState({
     search: "",
     department: "",
     yearLevel: "",
   });
 
+  // Fetch departments with courses & students
   useEffect(() => {
     const fetchDepartments = async () => {
       setLoading(true);
       try {
-        const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/departments`);
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/departments`);
         const data = await res.json();
+        console.log("API RESPONSE:", data); // Debug
         if (data.status === "success") setDepartments(data.data);
       } catch (err) {
+        console.error(err);
         setError(err.message);
       } finally {
         setLoading(false);
@@ -40,20 +42,17 @@ const AttendanceChart = () => {
     fetchDepartments();
   }, []);
 
-  // 2. UPDATED LOGIC TO USE THE NEW KEYS
+  // Safe filtered data
   const filteredData = departments
-    .filter((dept) => 
-      !filters.department || dept.department_name === filters.department
-    )
-    .map((dept) => {
-      const processedCourses = dept.courses.map((course) => {
-        const matchingStudents = course.students.filter((student) => {
-          const matchesSearch = 
+    .filter(dept => !filters.department || dept.department_name === filters.department)
+    .map(dept => {
+      const processedCourses = (dept.courses || []).map(course => {
+        const matchingStudents = (course.students || []).filter(student => {
+          const matchesSearch =
             student.name.toLowerCase().includes(filters.search.toLowerCase()) ||
             student.student_number.toLowerCase().includes(filters.search.toLowerCase());
-          
-          const matchesYear = 
-            !filters.yearLevel || String(student.year_level) === String(filters.yearLevel);
+
+          const matchesYear = !filters.yearLevel || String(student.year_level) === String(filters.yearLevel);
 
           return matchesSearch && matchesYear;
         });
@@ -61,16 +60,17 @@ const AttendanceChart = () => {
         return { ...course, students: matchingStudents };
       });
 
+      // Only hide courses if filters are active
       const activeFilter = filters.search || filters.yearLevel;
-      const visibleCourses = activeFilter 
+      const visibleCourses = activeFilter
         ? processedCourses.filter(c => c.students.length > 0)
         : processedCourses;
 
       return { ...dept, courses: visibleCourses };
-    })
-    .filter(dept => dept.courses.length > 0);
+    });
 
   if (loading) return <div className="p-20 text-center animate-pulse">Syncing...</div>;
+  if (error) return <div className="p-20 text-red-500">Error: {error}</div>;
 
   return (
     <div className="p-8 max-w-7xl mx-auto">
@@ -79,15 +79,17 @@ const AttendanceChart = () => {
         <p className="text-[var(--text-muted)] mt-2 font-medium italic">Manage student enrollment records.</p>
       </header>
 
-      {/* 3. FIXED PROP NAME: Changed departments to departmentOptions */}
-      <FilterBar 
-        filters={filters} 
-        setFilters={setFilters} 
-        departmentOptions={departments || []} 
+      <FilterBar
+        filters={filters}
+        setFilters={setFilters}
+        departmentOptions={departments || []}
       />
 
+      {/* Debug JSON output, optional */}
+      {/* <pre>{JSON.stringify(filteredData, null, 2)}</pre> */}
+
       <div className="space-y-6">
-        {filteredData.map((dept) => {
+        {filteredData.map(dept => {
           const isDeptOpen = openDept === dept.id;
           return (
             <div key={dept.id} className="rounded-2xl overflow-hidden shadow-sm border border-[var(--border-color)] bg-white transition-all">
@@ -112,7 +114,7 @@ const AttendanceChart = () => {
 
               {isDeptOpen && (
                 <div className="p-6 space-y-4 bg-[var(--bg-cream)]/40">
-                  {dept.courses.map((course) => {
+                  {dept.courses.map(course => {
                     const isCourseOpen = openCourse === course.id;
                     return (
                       <div key={course.id} className={`bg-white rounded-xl border transition-all ${isCourseOpen ? 'border-[var(--primary-teal)] shadow-md ring-1' : 'border-gray-200'}`}>
@@ -143,7 +145,7 @@ const AttendanceChart = () => {
                                 </tr>
                               </thead>
                               <tbody className="divide-y divide-gray-50">
-                                {course.students.map((student) => (
+                                {course.students.map(student => (
                                   <tr key={student.id} className="hover:bg-[var(--anemo-glow)]/10 transition-colors">
                                     <td className="p-3 font-mono text-xs font-bold text-[var(--secondary-green)]">{student.student_number}</td>
                                     <td className="p-3 text-sm font-semibold">{student.name}</td>
