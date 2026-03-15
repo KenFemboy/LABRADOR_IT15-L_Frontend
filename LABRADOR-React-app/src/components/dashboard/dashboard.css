@@ -149,8 +149,9 @@
   font-size: 1.5rem;
 }
 
-.logo {
-  font-size: 1.8rem;
+.logo img {
+  width: 70px;
+  height: 70px;
 }
 
 .sidebar-nav {

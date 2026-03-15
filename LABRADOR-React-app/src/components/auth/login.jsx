@@ -50,7 +50,7 @@ const Login = () => {
       {/* Left Branding */}
       <div className="login-left-panel">
         <div className="branding-content">
-          <div className="logo-icon">🎓</div>
+          <div className="logo-icon"><img src="anemo.svg" alt="Logo" /></div>
           <h1 className="school-title">University Portal</h1>
           <p className="school-tagline">
             "Winds of knowledge, melodies of freedom." <br />

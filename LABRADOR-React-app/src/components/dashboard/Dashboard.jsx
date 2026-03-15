@@ -52,7 +52,7 @@ const Dashboard = () => {
           <h1>{activeView.charAt(0).toUpperCase() + activeView.slice(1)}</h1>
           <WeatherWidget/>
           <div className="header-right"> 
-            <span className="logo">🎓</span>
+            <span className="logo"><img src="anemo.svg" alt="" /></span>
             <h2>UniPortal</h2>
           </div>
           
